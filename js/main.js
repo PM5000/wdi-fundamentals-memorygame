@@ -31,9 +31,9 @@ var cardsInPlay = [];
 //iiii(U9)Move the following lines of code into the checkForMatch function.
 checkForMatch = function() {
   if (cardsInPlay[0] === cardsInPlay[1]) {
-    console.log("You found a match!");
+    alert("You found a match!");
   } else {
-    console.log("Sorry, try again.");
+    alert("Sorry, try again.");
   }
 };
 
@@ -48,8 +48,15 @@ checkForMatch = function() {
 //ii(U10)first object in the cards array.
 //ii(U10)update this code so that we are accessing the rank property of this object
 //ii(U10)..Update this to cards[cardId].rank
-var flipCard = function(cardId) {
-  console.log("User Flipped" + cards[cardId].rank);
+//viii(U11)Before we can test things out, we'll need to make a few edits to
+//viii(U11) our flipCard function. Remove cardId parameter from the flip card function.
+//viii(U11) On the first line inside the flipCard function, use the getAttribute
+//viii(U11) method to get the data-id attribute of the card that was just
+//viii(U11) clicked and store it in a variable cardId.
+var flipCard = function() {
+  cardId = this.getAttribute('data-id');
+  console.log(cardId);
+  //console.log("User Flipped" + cards[cardId].rank);
   // Add card to array of cards that are in play
   //iii(U10)update the cards[cardId] portion of cardsInPlay.push(cards[cardId]);.
   //iii(U10)You'll want to push the name of the card...
@@ -58,19 +65,53 @@ var flipCard = function(cardId) {
   cardsInPlay.push(cards[cardId].rank);
   //iii(U10) Add two console.log() statements. One should log the cardImage
   //iii(U10)and the other should log the suit for the flipped card.
-  console.log(cards[cardId].cardImage)
-  console.log(cards[cardId].suit)
+  //console.log(cards[cardId].cardImage)
+  //console.log(cards[cardId].suit)
   //Leave or no? Check to see if two cards have been played
+  //viiii(U9) Right before the if statement where you are checking to see if
+  //viiii(U9) two cards have been played, use the setAttribute method to update the src
+  //viiii(U9) attribute to the image of the card that was just clicked, which is stored
+  //viiii(U9) in the cardImage property in that card's object in the cards array.
+  this.setAttribute('src', cards[cardId].cardImage);
   if (cardsInPlay.length === 2) {
     //Leave or no? If so, call the checkForMatch function
     checkForMatch();
+    //for the next try
+    //cardsInPlay = [];
   }
 };
+//iii(U11) right after the flipCard function, write a new function called
+//iii(U11) createBoard; as the name suggests, this function will create a
+//iii(U11) new game board.
+//iii(U11) The createBoard function should not have any parameters.
+//iii(U11) Within the createBoard function, use a for loop to loop through the
+//iii(U11) cards array.
+//iiii(U11) use the createElement method to create an img element and store it
+//iiii(U11) in a variable cardElement.
+var createBoard = function() {
+  for (var i = 0; i < cards.length; i++) {
+    var cardElement = document.createElement('img');
+    //v(U11) use the setAttribute() method to add a src attribute for the
+    //v(U11) cardElement. The src should be "images/back.png"
+    cardElement.setAttribute('src', 'images/back.png');
+    //v(U11) Now use the setAttribute() method once again to set the card's 'data-id'
+    //v(U11) attribute to be the index of the current element, i (no quotes).
+    cardElement.setAttribute('data-id', i);
+    //vi(U11) When each card is created (still within the for loop), we'll want to
+    //vi(U11) use the addEventListener() method to add a click event to the cardElement.
+    cardElement.addEventListener('click', flipCard);
+    //v1(U11) Finally, use the appendChild() method to append the current cardElement
+    //v1(U11) to the game board (which has an id of game-board).
+    document.getElementById('game-board').appendChild(cardElement);
+  }
+}
+
 //iii(U9)On the line after the flipCard function, call the flipCard function,
 //iii(U9)passing in 0 as an argument.
-flipCard(0);
+//v11(U11) Delete the two lines of code where you are calling the flipCard function:
+//flipCard(0);
 //iii(U9)on the next line, call the flipCard function again, passing in 2 as an argument.
-flipCard(2);
+//flipCard(2);
 
 //i(U9) Move all the code that you wrote for the last unit's assignment, except for the
 //i(U9) cards and cardsInPlay arrays into the flipCard function.
@@ -93,3 +134,5 @@ flipCard(2);
 //???  alert("Sorry, try again.");
 //???}
 //???}
+//x(U11)At the very end of your JavaScript file, invoke the createBoard function.
+createBoard();
